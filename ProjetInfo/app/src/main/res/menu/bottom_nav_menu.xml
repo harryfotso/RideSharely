@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/marqueur_de_carte"
+        android:title="Carte" />
+    <item
+        android:id="@+id/navigation_login"
+        android:icon="@drawable/utilisateur"
+        android:title="Identification" />
+</menu>

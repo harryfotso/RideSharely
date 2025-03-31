@@ -42,10 +42,12 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.github.chrisbanes:PhotoView:2.3.0")
+    implementation("com.github.chrisbanes:PhotoView:2.3.0") // Permet de naviguer dans le plan
     implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+    implementation("com.google.android.material:material:1.4.0") // Permet d'ajouter une barre de navigation
 }

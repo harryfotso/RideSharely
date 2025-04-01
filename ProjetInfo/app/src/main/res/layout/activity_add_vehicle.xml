@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Spinner
+        android:id="@+id/typeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" />
+
+    <EditText
+        android:id="@+id/marqueInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Marque" />
+
+    <EditText
+        android:id="@+id/modeleInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Modèle" />
+
+    <EditText
+        android:id="@+id/anneeInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Année"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/couleurInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Couleur" />
+
+    <EditText
+        android:id="@+id/tarifInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tarif journalier"
+        android:inputType="numberDecimal" />
+
+
+    <Button
+        android:id="@+id/btnAjouter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ajouter" />
+
+</LinearLayout>

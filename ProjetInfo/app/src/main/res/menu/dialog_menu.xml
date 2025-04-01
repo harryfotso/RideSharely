@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/action_option1"
         android:title="Voiture 1" />
+
     <item
         android:id="@+id/action_option2"
         android:title="Voiture 2" />
-    <!-- Ajoutez d'autres options si nécessaire -->
+
+    <item
+        android:id="@+id/menu_add_vehicle"
+        android:icon="@drawable/add_vehicle"
+        android:title="Ajouter un véhicule"
+        app:showAsAction="always"/>
 </menu>

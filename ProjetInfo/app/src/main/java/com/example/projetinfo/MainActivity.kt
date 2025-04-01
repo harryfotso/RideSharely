@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
             val yPixel = (y * intrinsicHeight).toInt()
 
             // Affichage des coordonnées pour vérification
-            //Toast.makeText(this, "Coordonnées: $xPixel, $yPixel", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Coordonnées: $xPixel, $yPixel", Toast.LENGTH_SHORT).show()
 
             // Vérification de la zone spécifique (en pixels)
             if (xPixel in 3180..4500 && yPixel in 4180..5800) {
@@ -243,7 +243,10 @@ class MainActivity : AppCompatActivity() {
                 // Action pour Option 2
                 Toast.makeText(this, "Vous devez d'abord vous identifier avant de pouvoir louer un véhicule", Toast.LENGTH_SHORT).show()
             }
-            // Ajoutez d'autres cas selon les options de votre menu
+            R.id.menu_add_vehicle -> {
+                val intent = Intent(this, AddVehicleActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 }

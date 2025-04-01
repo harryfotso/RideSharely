@@ -27,6 +27,11 @@
             android:name=".IdentificationActivity"
             android:exported="true" />
 
+        <!-- Déclaration de l'activité AddVehicleActivity -->
+        <activity
+            android:name=".AddVehicleActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

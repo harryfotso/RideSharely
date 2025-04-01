@@ -11,6 +11,7 @@ import com.github.chrisbanes.photoview.PhotoView
 import java.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.content.Intent
+import android.view.Menu
 
 
 
@@ -19,7 +20,7 @@ open class Voiture(
     val marque: String,
     val modele: String,
     val annee: Int,
-    val typeDeVoiture: String,
+    val type: String, // ici "Standard" par défaut
     val couleur: String,
     val tarifJournalier: Double,
     var disponibilite: Boolean
@@ -116,6 +117,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Initialiser VehicleRepository
+        VehicleRepository.init(this)
+
         val photoView = findViewById<PhotoView>(R.id.campusMapView)
         photoView.maximumScale = 5.0f
         photoView.mediumScale = 3.0f
@@ -170,83 +174,65 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showDialogMenuP3() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Parking 3 Solbosch")
-        val inflater = menuInflater
-        val popupMenu = PopupMenu(this, null)
-        inflater.inflate(R.menu.dialog_menu, popupMenu.menu)
-        val menu = popupMenu.menu
-
-        val menuItems = ArrayList<String>()
-        for (i in 0 until menu.size()) {
-            menuItems.add(menu.getItem(i).title.toString())
-        }
-
-        builder.setItems(menuItems.toTypedArray()) { dialog, which ->
-            val selectedItem = menu.getItem(which)
-            handleMenuItemClick(selectedItem)
-        }
-
-        builder.show()
-    }
 
     private fun showDialogMenuP1() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Parking 1 Solbosch")
-        val inflater = menuInflater
-        val popupMenu = PopupMenu(this, null)
-        inflater.inflate(R.menu.dialog_menu, popupMenu.menu)
-        val menu = popupMenu.menu
 
-        val menuItems = ArrayList<String>()
-        for (i in 0 until menu.size()) {
-            menuItems.add(menu.getItem(i).title.toString())
+        // Récupère la liste des véhicules pour le parking 1
+        val vehicleList1 = VehicleRepository.getVehicles("1")
+
+
+        if (vehicleList1.isEmpty()) {
+            builder.setMessage("Aucun véhicule disponible dans ce parking.")
+        } else {
+            builder.setItems(vehicleList1.toTypedArray()) { _, which ->
+                val selectedVehicle = vehicleList1[which]
+                Toast.makeText(this, "Vous devez d'abord vous identifier avant de pouvoir louer $selectedVehicle", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        builder.setItems(menuItems.toTypedArray()) { dialog, which ->
-            val selectedItem = menu.getItem(which)
-            handleMenuItemClick(selectedItem)
-        }
-
+        builder.setPositiveButton("Fermer") { dialog, _ -> dialog.dismiss() }
         builder.show()
     }
 
     private fun showDialogMenuP2() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Parking 2 Solbosch")
-        val inflater = menuInflater
-        val popupMenu = PopupMenu(this, null)
-        inflater.inflate(R.menu.dialog_menu, popupMenu.menu)
-        val menu = popupMenu.menu
 
-        val menuItems = ArrayList<String>()
-        for (i in 0 until menu.size()) {
-            menuItems.add(menu.getItem(i).title.toString())
+        // Récupère la liste des véhicules pour le parking 1
+        val vehicleList2 = VehicleRepository.getVehicles("1")
+
+        if (vehicleList2.isEmpty()) {
+            builder.setMessage("Aucun véhicule disponible dans ce parking.")
+        } else {
+            builder.setItems(vehicleList2.toTypedArray()) { _, which ->
+                val selectedVehicle = vehicleList2[which]
+                Toast.makeText(this, "Vous devez d'abord vous identifier avant de pouvoir louer $selectedVehicle", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        builder.setItems(menuItems.toTypedArray()) { dialog, which ->
-            val selectedItem = menu.getItem(which)
-            handleMenuItemClick(selectedItem)
-        }
-
+        builder.setPositiveButton("Fermer") { dialog, _ -> dialog.dismiss() }
         builder.show()
     }
 
-    private fun handleMenuItemClick(item: MenuItem) {
-        when (item.itemId) {
-            R.id.action_option1 -> {
-                // Action pour Option 1
-                Toast.makeText(this, "Vous devez d'abord vous identifier avant de pouvoir louer un véhicule", Toast.LENGTH_SHORT).show()
-            }
-            R.id.action_option2 -> {
-                // Action pour Option 2
-                Toast.makeText(this, "Vous devez d'abord vous identifier avant de pouvoir louer un véhicule", Toast.LENGTH_SHORT).show()
-            }
-            R.id.menu_add_vehicle -> {
-                val intent = Intent(this, AddVehicleActivity::class.java)
-                startActivity(intent)
+    private fun showDialogMenuP3() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Parking 3 Solbosch")
+
+        // Récupère la liste des véhicules pour le parking 1
+        val vehicleList3 = VehicleRepository.getVehicles("1")
+
+        if (vehicleList3.isEmpty()) {
+            builder.setMessage("Aucun véhicule disponible dans ce parking.")
+        } else {
+            builder.setItems(vehicleList3.toTypedArray()) { _, which ->
+                val selectedVehicle = vehicleList3[which]
+                Toast.makeText(this, "Vous devez d'abord vous identifier avant de pouvoir louer $selectedVehicle", Toast.LENGTH_SHORT).show()
             }
         }
+
+        builder.setPositiveButton("Fermer") { dialog, _ -> dialog.dismiss() }
+        builder.show()
     }
 }

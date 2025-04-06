@@ -13,7 +13,7 @@
         android:theme="@style/Theme.ProjetInfo"
         tools:targetApi="31">
 
-        <!-- Déclaration de l'activité de sélection (écran d'accueil) -->
+        <!-- Écran d'accueil -->
         <activity
             android:name=".SelectionActivity"
             android:exported="true">
@@ -23,20 +23,11 @@
             </intent-filter>
         </activity>
 
-        <!-- Déclaration de l'activité principale -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
-
-        <!-- Déclaration de l'activité IdentificationActivity -->
-        <activity
-            android:name=".IdentificationActivity"
-            android:exported="true" />
-
-        <!-- Déclaration de l'activité AddVehicleActivity -->
-        <activity
-            android:name=".AddVehicleActivity"
-            android:exported="true" />
+        <!-- Activités de l'application -->
+        <activity android:name=".MainActivity" android:exported="true" />
+        <activity android:name=".IdentificationActivity" android:exported="true" />
+        <activity android:name=".AddVehicleActivity" android:exported="true" />
+        <activity android:name=".ManageVehiclesActivity" android:exported="true" />
 
     </application>
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_manage"
+        android:icon="@drawable/menu_burger"
+        android:title="Mes voitures" />
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/auto"
+        android:title="Ajouter une voiture" />
+
+</menu>

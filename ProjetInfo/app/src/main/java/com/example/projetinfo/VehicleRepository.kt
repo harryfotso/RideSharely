@@ -23,6 +23,14 @@ object VehicleRepository {
         return vehiclesByParking[parking] ?: emptyList()
     }
 
+    fun removeVehicle(vehicle: String, parking: String) {
+        val vehicles = vehiclesByParking[parking]
+        if (vehicles != null) {
+            vehicles.remove(vehicle)
+            saveVehicles()
+        }
+    }
+
     private fun saveVehicles() {
         val editor = sharedPreferences.edit()
         vehiclesByParking.forEach { (parking, vehicles) ->
@@ -35,17 +43,12 @@ object VehicleRepository {
         vehiclesByParking.clear()
         sharedPreferences.all.forEach { (key, value) ->
             if (value is Set<*>) {
-                val vehicleList1 = value.map { it.toString() }.toMutableList()
-                vehiclesByParking[key] = vehicleList1
-                val vehicleList2 = value.map { it.toString() }.toMutableList()
-                vehiclesByParking[key] = vehicleList2
-                val vehicleList3 = value.map { it.toString() }.toMutableList()
-                vehiclesByParking[key] = vehicleList3
+                val vehicleList = value.map { it.toString() }.toMutableList()
+                vehiclesByParking[key] = vehicleList
 
-                // 🔥 Debugging: Afficher les véhicules chargés
+                // 🔍 Debug : Affiche les véhicules chargés
                 println("Chargement du parking $key : ${vehiclesByParking[key]}")
             }
         }
     }
-
 }

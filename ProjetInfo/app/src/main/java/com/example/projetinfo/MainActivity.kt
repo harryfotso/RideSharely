@@ -13,8 +13,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.content.Intent
 import android.view.Menu
 
-
-
 // Classe Voiture
 open class Voiture(
     val marque: String,
@@ -111,7 +109,6 @@ class ServiceLocation {
     }
 }
 
-
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,15 +138,11 @@ class MainActivity : AppCompatActivity() {
             // Affichage des coordonnées pour vérification
             Toast.makeText(this, "Coordonnées: $xPixel, $yPixel", Toast.LENGTH_SHORT).show()
 
-            // Vérification de la zone spécifique (en pixels)
-            if (xPixel in 3180..4500 && yPixel in 4180..5800) {
-                showDialogMenuP3()
-            }
-            else if (xPixel in 2000..2500 && yPixel in 4050..4900){
-                showDialogMenuP1()
-            }
-            else if (xPixel in 8400..10200 && yPixel in 3420..4450){
-                showDialogMenuP2()
+            // Vérification des zones spécifiques pour chaque parking
+            when {
+                xPixel in 3180..4500 && yPixel in 4180..5800 -> showDialogMenu("3") // Parking 3
+                xPixel in 2000..2500 && yPixel in 4050..4900 -> showDialogMenu("1") // Parking 1
+                xPixel in 8400..10200 && yPixel in 3420..4450 -> showDialogMenu("2") // Parking 2
             }
         }
 
@@ -159,14 +152,12 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.navigation_login -> {
                     // Rediriger vers la page d'identification
-                    //Toast.makeText(this, "Redirection vers l'identification", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, IdentificationActivity::class.java)
                     startActivity(intent)
                     true
                 }
                 R.id.navigation_map -> {
                     // Retour à la carte
-                    //Toast.makeText(this, "Retour à la carte", Toast.LENGTH_SHORT).show()
                     true
                 }
                 else -> false
@@ -174,60 +165,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun showDialogMenuP1() {
+    // Méthode unique pour afficher un dialogue en fonction du numéro de parking
+    private fun showDialogMenu(parkingKey: String) {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Parking 1 Solbosch")
+        builder.setTitle("Parking $parkingKey Solbosch")
 
-        // Récupère la liste des véhicules pour le parking 1
-        val vehicleList1 = VehicleRepository.getVehicles("1")
+        // Récupère la liste des véhicules pour le parking donné
+        val vehicleList = VehicleRepository.getVehicles(parkingKey)
 
-
-        if (vehicleList1.isEmpty()) {
+        if (vehicleList.isEmpty()) {
             builder.setMessage("Aucun véhicule disponible dans ce parking.")
         } else {
-            builder.setItems(vehicleList1.toTypedArray()) { _, which ->
-                val selectedVehicle = vehicleList1[which]
-                Toast.makeText(this, "Vous devez d'abord vous identifier avant de pouvoir louer $selectedVehicle", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        builder.setPositiveButton("Fermer") { dialog, _ -> dialog.dismiss() }
-        builder.show()
-    }
-
-    private fun showDialogMenuP2() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Parking 2 Solbosch")
-
-        // Récupère la liste des véhicules pour le parking 1
-        val vehicleList2 = VehicleRepository.getVehicles("1")
-
-        if (vehicleList2.isEmpty()) {
-            builder.setMessage("Aucun véhicule disponible dans ce parking.")
-        } else {
-            builder.setItems(vehicleList2.toTypedArray()) { _, which ->
-                val selectedVehicle = vehicleList2[which]
-                Toast.makeText(this, "Vous devez d'abord vous identifier avant de pouvoir louer $selectedVehicle", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        builder.setPositiveButton("Fermer") { dialog, _ -> dialog.dismiss() }
-        builder.show()
-    }
-
-    private fun showDialogMenuP3() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Parking 3 Solbosch")
-
-        // Récupère la liste des véhicules pour le parking 1
-        val vehicleList3 = VehicleRepository.getVehicles("1")
-
-        if (vehicleList3.isEmpty()) {
-            builder.setMessage("Aucun véhicule disponible dans ce parking.")
-        } else {
-            builder.setItems(vehicleList3.toTypedArray()) { _, which ->
-                val selectedVehicle = vehicleList3[which]
+            builder.setItems(vehicleList.toTypedArray()) { _, which ->
+                val selectedVehicle = vehicleList[which]
                 Toast.makeText(this, "Vous devez d'abord vous identifier avant de pouvoir louer $selectedVehicle", Toast.LENGTH_SHORT).show()
             }
         }

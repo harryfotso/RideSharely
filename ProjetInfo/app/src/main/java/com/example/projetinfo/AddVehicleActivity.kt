@@ -1,5 +1,6 @@
 package com.example.projetinfo
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -10,14 +11,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+
 class AddVehicleActivity : AppCompatActivity() {
+    // Méthode appelée lorsque l'activité est créée
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_vehicle)
+        setContentView(R.layout.activity_add_vehicle)  // Définit le layout pour cette activité
 
-        // Initialiser le repository de véhicules
+        // Initialisation du repository pour les véhicules
         VehicleRepository.init(this)
 
+        // Liaison des éléments de l'interface utilisateur à des variables Kotlin
         val spinnerParking = findViewById<Spinner>(R.id.spinnerParking)
         val marqueInput = findViewById<EditText>(R.id.marqueInput)
         val modeleInput = findViewById<EditText>(R.id.modeleInput)
@@ -25,43 +29,61 @@ class AddVehicleActivity : AppCompatActivity() {
         val couleurInput = findViewById<EditText>(R.id.couleurInput)
         val tarifInput = findViewById<EditText>(R.id.tarifInput)
         val btnAjouter = findViewById<Button>(R.id.btnAjouter)
+        val spinnerType = findViewById<Spinner>(R.id.spinnerType)
 
-        // Configuration du Spinner pour le choix du parking
+        // Définition des options du spinner pour choisir le parking
         val parkingOptions = listOf("Parking 1", "Parking 2", "Parking 3")
         val parkingAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, parkingOptions)
         parkingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerParking.adapter = parkingAdapter
+        spinnerParking.adapter = parkingAdapter  // Affectation de l'adaptateur au spinner permettant d'afficher les parkings dans l'interface
 
-        btnAjouter.setOnClickListener {
+        // Définition des options du spinner pour choisir le type de voiture
+        val typeOptions = listOf("Voiture à essence", "Voiture électrique")
+        val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typeOptions)
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerType.adapter = typeAdapter
+
+
+        // Configuration du clic sur le bouton "Ajouter"
+        btnAjouter.setOnClickListener { //Quand l'utilisateur clique sur ce bouton, l'action suivante est exécutée
+            // Récupération des valeurs saisies dans les champs
             val marque = marqueInput.text.toString()
             val modele = modeleInput.text.toString()
-            val annee = anneeInput.text.toString().toIntOrNull()
+            val annee = anneeInput.text.toString().toIntOrNull()  // Conversion en entier, ou null si invalide
             val couleur = couleurInput.text.toString()
-            val tarif = tarifInput.text.toString().toDoubleOrNull()
-            // Récupération de la clé de parking ("1", "2" ou "3")
-            val parkingNumber = (spinnerParking.selectedItemPosition + 1).toString()
+            val tarif = tarifInput.text.toString().toDoubleOrNull()  // Conversion en double, ou null si invalide
+            val parkingNumber = (spinnerParking.selectedItemPosition + 1).toString() // "1", "2" ou "3"
+            val selectedType = spinnerType.selectedItem.toString()
 
+
+            // Vérification si tous les champs sont remplis correctement
             if (marque.isEmpty() || modele.isEmpty() || annee == null || couleur.isEmpty() || tarif == null || annee <= 0 || tarif <= 0) {
                 Toast.makeText(this, "Veuillez remplir tous les champs correctement", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                //Toast.LENGTH_SHORT détermine la durée de l'affichage du message
+                //Toast est une classe dans Android qui permet d'afficher un message court et temporaire à l'utilisateur sous forme de pop-up
+                return@setOnClickListener  // Sortie de la fonction si un champ est invalide
             }
 
-            val vehicleDescription = "$marque $modele, Tarif: $tarif €/jour"
+            val vehicleDescription = "Marque: $marque, Modèle/année: $modele/$annee, Couleur: $couleur, Tarif: $tarif €/jour, Type: $selectedType" // Description du véhicule ajouté avec une chaîne de caractères
 
-            // Ajout du véhicule dans le repository
+
+            // Ajoute dans le bon parking
             VehicleRepository.addVehicle(vehicleDescription, parkingNumber)
 
-            Toast.makeText(this, "Véhicule ajouté dans Parking $parkingNumber", Toast.LENGTH_SHORT).show()
+            // Affichage d'un message de confirmation
+            Toast.makeText(this, "Véhicule ajouté dans Parking $parkingNumber", Toast.LENGTH_SHORT)
+                .show()
+
+            //Termine l'activité actuelle, fermant la page où l'utilisateur ajoute un véhicule et donc l''utilisateur est renvoyé à l'activité précédente après l'ajout du véhicule
             finish()
         }
 
         // Configuration du BottomNavigationView pour le loueur
         // Ce menu doit être défini dans le layout activity_add_vehicle.xml et contenir les items avec les identifiants "navigation_manage" et "navigation_home"
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+        bottomNavigationView.setOnItemSelectedListener{ item ->
             when (item.itemId) {
                 R.id.navigation_manage -> {
-                    // Lancer l'activité de gestion des véhicules pour le parking sélectionné
                     val parkingNumber = (spinnerParking.selectedItemPosition + 1).toString()
                     val intent = Intent(this, ManageVehiclesActivity::class.java)
                     intent.putExtra("parkingKey", parkingNumber)
@@ -69,7 +91,11 @@ class AddVehicleActivity : AppCompatActivity() {
                     true
                 }
                 R.id.navigation_home -> {
-                    // Rester sur l'activité d'ajout
+                    // Si on est déjà sur IdentificationActivity, on doit éviter d'y revenir
+                    val intent = Intent(this, IdentificationActivity::class.java)
+                    intent.putExtra("context", "ajout_voiture")
+                    startActivity(intent)
+                    finish()  // Ajoutez finish pour fermer l'activity actuelle
                     true
                 }
                 else -> false
@@ -77,3 +103,4 @@ class AddVehicleActivity : AppCompatActivity() {
         }
     }
 }
+

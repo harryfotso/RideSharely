@@ -27,6 +27,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp" />
 
+            <Spinner
+                android:id="@+id/spinnerType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <EditText
                 android:id="@+id/marqueInput"
                 android:layout_width="match_parent"

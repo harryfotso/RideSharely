@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
+
 class SelectionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,8 +18,13 @@ class SelectionActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
 
+        // Envoie l'intent avec le contexte "ajout_voiture"
         btnLoueur.setOnClickListener {
-            startActivity(Intent(this, AddVehicleActivity::class.java))
+            val intent = Intent(this, IdentificationActivity::class.java)
+            intent.putExtra("context", "ajout_voiture")  // Assurez-vous que vous passez le bon contexte
+            startActivity(intent)
         }
+
     }
 }
+

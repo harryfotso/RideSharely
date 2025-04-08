@@ -6,7 +6,7 @@
         android:title="Mes voitures" />
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/auto"
-        android:title="Ajouter une voiture" />
+        android:icon="@drawable/portrait"
+        android:title="Identification" />
 
 </menu>

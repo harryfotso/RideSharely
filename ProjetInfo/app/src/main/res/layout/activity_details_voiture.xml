@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/marqueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Marque : "
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/modeleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/marqueText"
+        android:text="Modèle/Année : "
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/anneeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/modeleText"
+        android:text="Année : "
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/couleurText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/anneeText"
+        android:text="Couleur : "
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/tarifText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/couleurText"
+        android:text="Tarif : "
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/typeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tarifText"
+        android:text="Type : "
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:id="@+id/typeIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/typeText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:contentDescription="Icône type de voiture" />
+
+    <Button
+        android:id="@+id/btnNiveau"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/typeIcon"
+        android:text="Voir niveau batterie/essence"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp" />
+
+    <Button
+        android:id="@+id/btnIdentification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Identification"
+        android:layout_below="@id/btnNiveau"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+</RelativeLayout>

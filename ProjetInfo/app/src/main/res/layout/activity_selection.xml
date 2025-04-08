@@ -1,22 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:gravity="center"
+android:padding="20dp">
+
+<!-- Image en haut -->
+<ImageView
+    android:id="@+id/imageLogo"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:src="@drawable/icone_appli"
+    android:layout_marginBottom="20dp"
+    android:contentDescription="Logo voiture" />
+
+
+<!-- Titre principal -->
+<TextView
+    android:id="@+id/tvTitle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="20dp">
+    android:layout_height="wrap_content"
+    android:text="Bienvenue dans l'application de location de voitures: RideSharely"
+    android:textSize="24sp"
+    android:textStyle="bold"
+    android:layout_marginBottom="10dp"
+    android:gravity="center" />
 
-    <Button
-        android:id="@+id/btnLocataire"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Je suis Locataire" />
+<!-- Sous-titre -->
+<TextView
+    android:id="@+id/tvSubtitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Choisissez une option pour commencer"
+    android:textSize="16sp"
+    android:textColor="#666666"
+    android:layout_marginBottom="40dp" />
 
-    <Button
-        android:id="@+id/btnLoueur"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Je suis Loueur"
-        android:layout_marginTop="20dp"/>
+<!-- Bouton Louer une voiture -->
+<Button
+    android:id="@+id/btnLocataire"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Louer une voiture"
+    android:backgroundTint="#616161"/>
+
+<!-- Bouton Mettre en location une voiture -->
+<Button
+    android:id="@+id/btnLoueur"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Mettre une voiture en location"
+    android:layout_marginTop="20dp"
+    android:backgroundTint="#616161"/>
 </LinearLayout>
+
+
+
+
+

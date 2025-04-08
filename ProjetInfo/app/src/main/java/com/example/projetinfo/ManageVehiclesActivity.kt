@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.content.Intent
 
+
 class ManageVehiclesActivity : AppCompatActivity() {
 
     private lateinit var listView: ListView
@@ -41,7 +42,7 @@ class ManageVehiclesActivity : AppCompatActivity() {
                     VehicleRepository.removeVehicle(selectedVehicle.first, selectedVehicle.second)
                     vehicleList.removeAt(position)
                     refreshList()
-                    Toast.makeText(this, "Véhicule supprimé", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Véhicule supprimé", Toast.LENGTH_LONG).show()
                 }
                 .setNegativeButton("Annuler", null)
                 .show()

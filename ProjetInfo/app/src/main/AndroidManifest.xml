@@ -39,6 +39,9 @@
         <activity
             android:name=".AddVehicleActivity"
             android:exported="true" />
+        <activity
+            android:name=".ReservationActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

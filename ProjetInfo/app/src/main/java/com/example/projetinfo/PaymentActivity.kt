@@ -26,19 +26,25 @@ class PaymentActivity : AppCompatActivity() {
             val dateExpiration = etDateExpiration.text.toString()
             val cvv = etCVV.text.toString()
 
-            // Validation basique des champs
-            if (numCarte.isNotEmpty() && dateExpiration.isNotEmpty() && cvv.isNotEmpty()) {
+            // Créer un objet Payment avec les données saisies
+            val payment = Payment(numCarte, dateExpiration, cvv)
+
+            // Validation des données de paiement
+            if (payment.verifierNumCarte() && payment.verifierDateExpiration() && payment.verifierCvv()) {
+                // Si tout est valide
                 Toast.makeText(this, "Paiement effectué avec succès", Toast.LENGTH_LONG).show()
 
                 // Retour à MainActivity (affichage de la carte)
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish() // Fermer PaymentActivity
-
             } else {
-                // Afficher un message d'erreur si un champ est vide
-                Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_LONG).show()
+                // Si les données sont invalides
+                Toast.makeText(this, "Veuillez remplir tous les champs correctement", Toast.LENGTH_LONG).show()
             }
         }
     }
 }
+
+
+

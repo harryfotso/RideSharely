@@ -76,13 +76,41 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp" />
 
+
     <Button
-        android:id="@+id/btnIdentification"
+        android:id="@+id/btnSelectStartDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Identification"
+        android:text="Sélectionner date début"
         android:layout_below="@id/btnNiveau"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="16dp"
+        android:layout_alignParentStart="true" />
 
+    <Button
+        android:id="@+id/btnSelectEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sélectionner date fin"
+        android:layout_below="@id/btnNiveau"
+        android:layout_toEndOf="@id/btnSelectStartDate"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/tvDaysCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre de jours : 0"
+        android:layout_below="@id/btnSelectStartDate"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btnPrintInvoice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Afficher détails de réservation"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
 </RelativeLayout>

@@ -9,9 +9,7 @@ open class Voiture(
     val couleur: String,
     val tarif: Double,
     val type: String
-) {
-    // Méthodes communes à toutes les voitures
-}
+) : Serializable
 
 class VoitureElectrique(
     marque: String,
@@ -19,12 +17,7 @@ class VoitureElectrique(
     annee: Int,
     couleur: String,
     tarif: Double
-) : Voiture(marque, modele, annee, couleur, tarif, "Électrique") {
-
-    fun niveauBatterie(): Int {
-        return (0..100).random()  // Niveau de batterie généré aléatoirement
-    }
-}
+) : Voiture(marque, modele, annee, couleur, tarif, "Électrique"), Energie
 
 class VoitureEssence(
     marque: String,
@@ -32,10 +25,4 @@ class VoitureEssence(
     annee: Int,
     couleur: String,
     tarif: Double
-) : Voiture(marque, modele, annee, couleur, tarif, "Essence") {
-
-    fun niveauEssence(): Int {
-        return (0..100).random()  // Niveau d'essence généré aléatoirement
-    }
-}
-
+) : Voiture(marque, modele, annee, couleur, tarif, "Essence"), Energie

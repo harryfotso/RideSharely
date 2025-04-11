@@ -1,40 +1,43 @@
 package com.example.projetinfo
 
+import android.app.DatePickerDialog
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import android.content.Intent
 import android.widget.ImageView
-
-
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DetailsVoitureActivity : AppCompatActivity() {
+    private var dateDebut: Calendar? = null
+    private var dateFin: Calendar? = null
+    private val formatDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private var tarifJournalier: Double = 0.0
+    private var nombreDeJours: Int = 0
+    private var montantTotal: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_voiture)
 
-        // Récupérer la description de la voiture passée via l'Intent
-        val vehicleDescription = intent.getStringExtra("vehicleDescription") ?: ""
-
         // Variables pour stocker le niveau une seule fois
-        var niveauBatterieMemo: Int? = null
-        var niveauEssenceMemo: Int? = null
+        var niveauBatterieMemo: String? = null
+        var niveauEssenceMemo: String? = null
 
-        // Parser la description pour créer un objet Voiture
-        val voiture = parseVoiture(vehicleDescription)
+        val descriptionVoiture = intent.getStringExtra("vehicleDescription") ?: ""
+        val voiture = parseVoiture(descriptionVoiture)
+        tarifJournalier = voiture.tarif
+        val modele = voiture.modele
 
-        // Affichage des caractéristiques de la voiture
-        val marqueText = findViewById<TextView>(R.id.marqueText)
-        val modeleText = findViewById<TextView>(R.id.modeleText)
-        val anneeText = findViewById<TextView>(R.id.anneeText)
-        val couleurText = findViewById<TextView>(R.id.couleurText)
-        val tarifText = findViewById<TextView>(R.id.tarifText)
+        findViewById<TextView>(R.id.marqueText).text = "Marque : ${voiture.marque}"
+        findViewById<TextView>(R.id.modeleText).text = "Modèle : ${voiture.modele}"
+        findViewById<TextView>(R.id.anneeText).text = "Année : ${voiture.annee}"
+        findViewById<TextView>(R.id.couleurText).text = "Couleur : ${voiture.couleur}"
+        findViewById<TextView>(R.id.tarifText).text = "Tarif : ${voiture.tarif} €/jour"
+
         val typeText = findViewById<TextView>(R.id.typeText)
         val typeIcon = findViewById<ImageView>(R.id.typeIcon)
 
@@ -44,58 +47,108 @@ class DetailsVoitureActivity : AppCompatActivity() {
             else -> "Inconnu"
         }
 
-
         typeText.text = "Type de voiture : $type"
-        marqueText.text = "Marque : ${voiture.marque}"
-        modeleText.text = "Modèle : ${voiture.modele}"
-        anneeText.text = "Année : ${voiture.annee}"
-        couleurText.text = "Couleur : ${voiture.couleur}"
-        tarifText.text = "Tarif : ${voiture.tarif} €/jour"
-
 
         when (voiture) {
-            is VoitureElectrique -> {
-                typeIcon.setImageResource(R.drawable.battery_icon)
-            }
-            is VoitureEssence -> {
-                typeIcon.setImageResource(R.drawable.essence_icon)
-            }
-            else -> {
-                typeIcon.setImageResource(android.R.drawable.ic_dialog_alert) // par défaut
-            }
+            is VoitureElectrique -> typeIcon.setImageResource(R.drawable.battery_icon)
+            is VoitureEssence -> typeIcon.setImageResource(R.drawable.essence_icon)
+            else -> typeIcon.setImageResource(android.R.drawable.ic_dialog_alert)
         }
-
 
         // Ajouter un bouton pour afficher le niveau de la batterie/essence
         val btnNiveau = findViewById<Button>(R.id.btnNiveau)
-
         btnNiveau.setOnClickListener {
             if (voiture is VoitureElectrique) {
-                // Génère une seule fois le niveau de batterie
                 if (niveauBatterieMemo == null) {
-                    niveauBatterieMemo = voiture.niveauBatterie()
+                    niveauBatterieMemo = voiture.etatEnergie()
                 }
                 Toast.makeText(this, "Niveau de batterie : $niveauBatterieMemo%", Toast.LENGTH_LONG).show()
             } else if (voiture is VoitureEssence) {
-                // Génère une seule fois le niveau d'essence
                 if (niveauEssenceMemo == null) {
-                    niveauEssenceMemo = voiture.niveauEssence()
+                    niveauEssenceMemo = voiture.etatEnergie()
                 }
                 Toast.makeText(this, "Niveau d'essence : $niveauEssenceMemo%", Toast.LENGTH_LONG).show()
             }
         }
 
-        // Ajouter le bouton pour l'identification
-        val btnIdentification = findViewById<Button>(R.id.btnIdentification)
-        btnIdentification.setOnClickListener {
-            // Lancer l'activité d'identification
-            val intent = Intent(this, IdentificationActivity::class.java)
-            intent.putExtra("context", "louer_voiture")  // Si tu as besoin de passer des informations supplémentaires
+        val btnDateDebut = findViewById<Button>(R.id.btnSelectStartDate)
+        val btnDateFin = findViewById<Button>(R.id.btnSelectEndDate)
+        val tvNombreDeJours = findViewById<TextView>(R.id.tvDaysCount)
+        val btnFacture = findViewById<Button>(R.id.btnPrintInvoice)
+
+        btnDateDebut.setOnClickListener {
+            showDatePicker { date ->
+                dateDebut = date
+                Toast.makeText(this, "Date début : ${formatDate.format(date.time)}", Toast.LENGTH_SHORT).show()
+                updateDaysCount(tvNombreDeJours)
+            }
+        }
+
+        btnDateFin.setOnClickListener {
+            showDatePicker { date ->
+                dateFin = date
+                Toast.makeText(this, "Date fin : ${formatDate.format(date.time)}", Toast.LENGTH_SHORT).show()
+                updateDaysCount(tvNombreDeJours)
+            }
+        }
+
+        btnFacture.setOnClickListener {
+            if (dateDebut == null || dateFin == null) {
+                Toast.makeText(this, "Veuillez sélectionner les dates", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Assurez-vous que les dates sont non nulles avant de créer la réservation
+            val reservation = Reservation(
+                modele = modele,
+                dateDebut = dateDebut!!, // Utilisation de "!!" pour garantir que ce n'est pas null
+                dateFin = dateFin!!,
+                tarifJournalier = tarifJournalier,
+                nombreDeJours = nombreDeJours,
+                montantTotal = montantTotal
+            )
+
+            // Calculer la durée et le montant total de la réservation
+            nombreDeJours = reservation.calculerDuree() // Calcul de la durée
+            montantTotal = reservation.calculerMontantTotal() // Calcul du montant total
+
+            // Afficher la durée et le montant total
+            tvNombreDeJours.text = "Nombre de jours : $nombreDeJours"
+
+            val intent = Intent(this, ReservationActivity::class.java).apply {
+                putExtra("modele", voiture.modele)
+                putExtra("dateDebut", formatDate.format(dateDebut!!.time))
+                putExtra("dateFin", formatDate.format(dateFin!!.time))
+                putExtra("nombreDeJours", nombreDeJours)
+                putExtra("montantTotal", montantTotal)
+            }
             startActivity(intent)
         }
     }
 
-    // Fonction pour parser la description en un objet Voiture
+    private fun showDatePicker(onDateSelected: (Calendar) -> Unit) {
+        val calendrier = Calendar.getInstance()
+        DatePickerDialog(
+            this,
+            { _, annee, mois, jour ->
+                val dateChoisie = Calendar.getInstance()
+                dateChoisie.set(annee, mois, jour)
+                onDateSelected(dateChoisie)
+            },
+            calendrier.get(Calendar.YEAR),
+            calendrier.get(Calendar.MONTH),
+            calendrier.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun updateDaysCount(tv: TextView) {
+        if (dateDebut != null && dateFin != null) {
+            val diff = dateFin!!.timeInMillis - dateDebut!!.timeInMillis
+            val jours = (diff / (1000 * 60 * 60 * 24)).toInt()
+            tv.text = "Nombre de jours : $jours"
+        }
+    }
+
     private fun parseVoiture(description: String): Voiture {
         val marque = Regex("Marque: ([^,]+)").find(description)?.groupValues?.get(1) ?: ""
         val modele = Regex("Modèle/année: ([^/]+)/").find(description)?.groupValues?.get(1) ?: ""
@@ -107,9 +160,8 @@ class DetailsVoitureActivity : AppCompatActivity() {
         return when (type) {
             "voiture électrique" -> VoitureElectrique(marque, modele, annee, couleur, tarif)
             "voiture à essence" -> VoitureEssence(marque, modele, annee, couleur, tarif)
-            else -> VoitureEssence(marque, modele, annee, couleur, tarif) // Valeur par défaut
+            else -> VoitureEssence(marque, modele, annee, couleur, tarif)
         }
     }
 }
-
 

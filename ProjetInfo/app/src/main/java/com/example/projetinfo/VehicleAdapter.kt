@@ -9,7 +9,7 @@ import android.widget.TextView
 
 class VehicleAdapter(
     context: Context,
-    private val vehicles: List<Pair<String, String>> // Liste de véhicules
+    vehicles: List<Pair<String, String>> // Liste de véhicules
 ) : ArrayAdapter<Pair<String, String>>(context, android.R.layout.simple_list_item_1, vehicles) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

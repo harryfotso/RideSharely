@@ -5,13 +5,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import android.content.Intent
 import android.widget.ImageView
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DetailsVoitureActivity : AppCompatActivity() {
+class DetailsVoitureActivity : AppCompatActivity(), Notifier {
     private var dateDebut: Calendar? = null
     private var dateFin: Calendar? = null
     private val formatDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -19,11 +18,16 @@ class DetailsVoitureActivity : AppCompatActivity() {
     private var nombreDeJours: Int = 0
     private var montantTotal: Double = 0.0
 
+    private val toastNotifier by lazy { ToastNotifier(this) }
+
+    override fun notify(message: String) {
+        toastNotifier.notify(message)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_voiture)
 
-        // Variables pour stocker le niveau une seule fois
         var niveauBatterieMemo: String? = null
         var niveauEssenceMemo: String? = null
 
@@ -55,19 +59,18 @@ class DetailsVoitureActivity : AppCompatActivity() {
             else -> typeIcon.setImageResource(android.R.drawable.ic_dialog_alert)
         }
 
-        // Ajouter un bouton pour afficher le niveau de la batterie/essence
         val btnNiveau = findViewById<Button>(R.id.btnNiveau)
         btnNiveau.setOnClickListener {
             if (voiture is VoitureElectrique) {
                 if (niveauBatterieMemo == null) {
                     niveauBatterieMemo = voiture.etatEnergie()
                 }
-                Toast.makeText(this, "Niveau de batterie : $niveauBatterieMemo%", Toast.LENGTH_LONG).show()
+                notify("Niveau de batterie : $niveauBatterieMemo%")
             } else if (voiture is VoitureEssence) {
                 if (niveauEssenceMemo == null) {
                     niveauEssenceMemo = voiture.etatEnergie()
                 }
-                Toast.makeText(this, "Niveau d'essence : $niveauEssenceMemo%", Toast.LENGTH_LONG).show()
+                notify("Niveau d'essence : $niveauEssenceMemo%")
             }
         }
 
@@ -79,7 +82,7 @@ class DetailsVoitureActivity : AppCompatActivity() {
         btnDateDebut.setOnClickListener {
             showDatePicker { date ->
                 dateDebut = date
-                Toast.makeText(this, "Date début : ${formatDate.format(date.time)}", Toast.LENGTH_SHORT).show()
+                notify("Date début : ${formatDate.format(date.time)}")
                 updateDaysCount(tvNombreDeJours)
             }
         }
@@ -87,32 +90,29 @@ class DetailsVoitureActivity : AppCompatActivity() {
         btnDateFin.setOnClickListener {
             showDatePicker { date ->
                 dateFin = date
-                Toast.makeText(this, "Date fin : ${formatDate.format(date.time)}", Toast.LENGTH_SHORT).show()
+                notify("Date fin : ${formatDate.format(date.time)}")
                 updateDaysCount(tvNombreDeJours)
             }
         }
 
         btnFacture.setOnClickListener {
             if (dateDebut == null || dateFin == null) {
-                Toast.makeText(this, "Veuillez sélectionner les dates", Toast.LENGTH_SHORT).show()
+                notify("Veuillez sélectionner les dates")
                 return@setOnClickListener
             }
 
-            // Assurez-vous que les dates sont non nulles avant de créer la réservation
             val reservation = Reservation(
                 modele = modele,
-                dateDebut = dateDebut!!, // Utilisation de "!!" pour garantir que ce n'est pas null
+                dateDebut = dateDebut!!,
                 dateFin = dateFin!!,
                 tarifJournalier = tarifJournalier,
                 nombreDeJours = nombreDeJours,
                 montantTotal = montantTotal
             )
 
-            // Calculer la durée et le montant total de la réservation
-            nombreDeJours = reservation.calculerDuree() // Calcul de la durée
-            montantTotal = reservation.calculerMontantTotal() // Calcul du montant total
+            nombreDeJours = reservation.calculerDuree()
+            montantTotal = reservation.calculerMontantTotal()
 
-            // Afficher la durée et le montant total
             tvNombreDeJours.text = "Nombre de jours : $nombreDeJours"
 
             val intent = Intent(this, ReservationActivity::class.java).apply {
@@ -164,4 +164,3 @@ class DetailsVoitureActivity : AppCompatActivity() {
         }
     }
 }
-

@@ -3,13 +3,18 @@ package com.example.projetinfo
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+class IdentificationActivity : AppCompatActivity(), Notifier {
 
-class IdentificationActivity : AppCompatActivity() {
+    private val toastNotifier by lazy { ToastNotifier(this) }
+
+    override fun notify(message: String) {
+        toastNotifier.notify(message)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_identification)
@@ -34,7 +39,7 @@ class IdentificationActivity : AppCompatActivity() {
 
             if (identification.verifierDonnees()) {
                 val utilisateur = identification.creerUtilisateur()
-                Toast.makeText(this, "Inscription réussie", Toast.LENGTH_LONG).show()
+                notify("Inscription réussie")
 
                 when (context) {
                     "ajout_voiture" -> {
@@ -54,11 +59,11 @@ class IdentificationActivity : AppCompatActivity() {
                     }
 
                     else -> {
-                        Toast.makeText(this, "Contexte inconnu", Toast.LENGTH_LONG).show()
+                        notify("Contexte inconnu")
                     }
                 }
             } else {
-                Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_LONG).show()
+                notify("Veuillez remplir tous les champs")
             }
         }
 
@@ -77,6 +82,3 @@ class IdentificationActivity : AppCompatActivity() {
         }
     }
 }
-
-
-

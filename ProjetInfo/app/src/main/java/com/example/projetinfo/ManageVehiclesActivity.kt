@@ -2,17 +2,22 @@ package com.example.projetinfo
 
 import android.os.Bundle
 import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.content.Intent
 
-class ManageVehiclesActivity : AppCompatActivity() {
+class ManageVehiclesActivity : AppCompatActivity(), Notifier {
 
     private lateinit var listView: ListView
     private lateinit var vehicleList: MutableList<Pair<String, String>> // Pair<vehicleDescription, parkingKey>
     private lateinit var adapter: VehicleAdapter // Utilisation du VehicleAdapter personnalisé
+
+    private val toastNotifier by lazy { ToastNotifier(this) }
+
+    override fun notify(message: String) {
+        toastNotifier.notify(message)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +45,7 @@ class ManageVehiclesActivity : AppCompatActivity() {
                     VehicleRepository.removeVehicle(selectedVehicle.first, selectedVehicle.second)
                     vehicleList.removeAt(position)
                     refreshList()
-                    Toast.makeText(this, "Véhicule supprimé", Toast.LENGTH_LONG).show()
+                    notify("Véhicule supprimé")
                 }
                 .setNegativeButton("Annuler", null)
                 .show()

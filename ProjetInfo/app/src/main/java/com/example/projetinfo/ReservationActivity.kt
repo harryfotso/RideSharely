@@ -6,9 +6,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Calendar
-import java.text.SimpleDateFormat
-import java.util.Locale
-
 
 class ReservationActivity : AppCompatActivity() {
 

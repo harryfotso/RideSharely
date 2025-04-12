@@ -1,7 +1,6 @@
 package com.example.projetinfo
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -9,12 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.content.Intent
 
-
 class ManageVehiclesActivity : AppCompatActivity() {
 
     private lateinit var listView: ListView
     private lateinit var vehicleList: MutableList<Pair<String, String>> // Pair<vehicleDescription, parkingKey>
-    private lateinit var adapter: ArrayAdapter<String>
+    private lateinit var adapter: VehicleAdapter // Utilisation du VehicleAdapter personnalisé
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +23,10 @@ class ManageVehiclesActivity : AppCompatActivity() {
         listView = findViewById(R.id.listViewVehicles)
         loadAllVehicles()
 
-        adapter = ArrayAdapter(
+        // Remplacement de ArrayAdapter par VehicleAdapter
+        adapter = VehicleAdapter(
             this,
-            android.R.layout.simple_list_item_1,
-            vehicleList.map { it.first } // affichage de la description uniquement
+            vehicleList // On passe la liste des véhicules directement
         )
         listView.adapter = adapter
 
@@ -61,7 +59,6 @@ class ManageVehiclesActivity : AppCompatActivity() {
                 }
                 R.id.navigation_manage -> {
                     // Action pour un autre item (si tu en as)
-                    //Toast.makeText(this, "Autre option sélectionnée", Toast.LENGTH_SHORT).show()
                     true
                 }
                 else -> false
@@ -75,14 +72,14 @@ class ManageVehiclesActivity : AppCompatActivity() {
             val parkingKey = i.toString()
             val vehicles = VehicleRepository.getVehicles(parkingKey)
             vehicles.forEach { vehicle ->
-                vehicleList.add(Pair(vehicle, parkingKey))
+                vehicleList.add(Pair(vehicle, parkingKey)) // Ajoute la paire (description, parkingKey)
             }
         }
     }
 
     private fun refreshList() {
         adapter.clear()
-        adapter.addAll(vehicleList.map { it.first })
+        adapter.addAll(vehicleList) // Ajouter la liste complète d'objets Pair<String, String>
         adapter.notifyDataSetChanged()
     }
 }

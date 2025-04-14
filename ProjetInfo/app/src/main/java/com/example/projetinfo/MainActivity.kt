@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.github.chrisbanes.photoview.PhotoView
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
@@ -65,9 +66,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDialogMenu(parkingKey: String) {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Parking $parkingKey Solbosch")
+
+        // Initialisation de Parking et StatistiquesParking
+        val parking = Parking(parkingKey)
+        val statistiquesParking = StatistiquesParking(parking)
+        parking.notifierObservateurs() // Met à jour les observateurs immédiatement
 
         val vehicleList = VehicleRepository.getVehicles(parkingKey)
+        val statistiques = statistiquesParking.obtenirStatistiques()
+
+        // Ajout des statistiques dans le titre personnalisé
+        val titleView = TextView(this).apply {
+            text = "Parking $parkingKey Solbosch\n$statistiques"
+            textSize = 18f
+            setPadding(16, 16, 16, 16)
+        }
+        builder.setCustomTitle(titleView)
 
         if (vehicleList.isEmpty()) {
             builder.setMessage("Aucun véhicule disponible dans ce parking.")

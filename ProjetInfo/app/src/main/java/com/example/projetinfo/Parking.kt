@@ -1,21 +1,16 @@
 package com.example.projetinfo
 
-class Parking : Observable {
+class Parking(private val parkingKey: String) : Observable {
     private val observateurs = mutableListOf<Observer>()
-    private val reservations = mutableListOf<Reservation>() // Liste des réservations
 
-    fun ajouterReservation(reservation: Reservation) {
-        reservations.add(reservation)
-        notifierObservateurs()
+    // Récupère les réservations (véhicules) depuis VehicleRepository
+    fun obtenirReservations(): List<String> {
+        return VehicleRepository.getVehicles(parkingKey)
     }
 
-    fun retirerReservation(reservation: Reservation) {
-        reservations.remove(reservation)
-        notifierObservateurs()
-    }
-
+    // Retourne le nombre de réservations
     fun obtenirNombreDeReservations(): Int {
-        return reservations.size
+        return obtenirReservations().size
     }
 
     override fun ajouterObservateur(observateur: Observer) {

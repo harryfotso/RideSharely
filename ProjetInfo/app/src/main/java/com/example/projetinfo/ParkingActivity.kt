@@ -12,7 +12,8 @@ class ParkingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_vehicles)
 
-        parking = Parking()
+        // Initialisation du parking avec une clé spécifique
+        parking = Parking("1")
         statistiquesTextView = findViewById(R.id.statistiquesParking)
 
         // Initialisation de l'observateur
@@ -23,9 +24,11 @@ class ParkingActivity : AppCompatActivity() {
                 }
             }
         }
+
         // Enregistrer l'observateur
         parking.ajouterObservateur(statistiquesParking)
 
-
+        // Notifier les observateurs au démarrage
+        parking.notifierObservateurs()
     }
 }

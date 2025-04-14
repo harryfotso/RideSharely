@@ -28,7 +28,7 @@ class ManageVehiclesActivity : AppCompatActivity(), Notifier {
         listView = findViewById(R.id.listViewVehicles)
         loadAllVehicles()
 
-        // Remplacement de ArrayAdapter par VehicleAdapter
+
         adapter = VehicleAdapter(
             this,
             vehicleList // On passe la liste des véhicules directement

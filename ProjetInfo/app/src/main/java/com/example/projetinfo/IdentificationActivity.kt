@@ -54,8 +54,14 @@ class IdentificationActivity : AppCompatActivity(), Notifier {
                     }
 
                     "louer_voiture" -> {
-                        val intent = Intent(this, PaymentActivity::class.java)
+                        val intent = Intent(this, PaymentActivity::class.java).apply {
+                            putExtra("nom", utilisateur.nom)
+                            putExtra("prenom", utilisateur.prenom)
+                            putExtra("telephone", utilisateur.telephone)
+                            putExtra("email", utilisateur.email)
+                        }
                         startActivity(intent)
+                        finish()
                     }
 
                     else -> {

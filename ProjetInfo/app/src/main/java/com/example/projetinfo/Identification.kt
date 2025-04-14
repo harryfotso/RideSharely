@@ -17,6 +17,6 @@ class Identification(
     }
 
     fun creerUtilisateur(): Utilisateur {
-        return Utilisateur(nom, prenom, email, motDePasse, telephone)
+        return Utilisateur(nom, prenom, email, telephone)
     }
 }

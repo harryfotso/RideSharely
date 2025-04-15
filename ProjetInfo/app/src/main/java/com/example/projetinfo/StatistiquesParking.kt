@@ -1,7 +1,7 @@
 package com.example.projetinfo
 
 open class StatistiquesParking(private val parking: Parking) : Observer {
-    private var nombreDeReservations: Int = 0
+    protected var nombreDeReservations: Int = 0
 
     init {
         parking.ajouterObservateur(this)

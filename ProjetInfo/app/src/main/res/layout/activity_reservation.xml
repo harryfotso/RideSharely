@@ -53,10 +53,10 @@
         android:layout_marginBottom="8dp" />
 
     <Button
-        android:id="@+id/btnIdentification"
+        android:id="@+id/btnPaiement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Identification"
+        android:text="Effectuer le paiement"
         android:layout_below="@id/btnNiveau"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />

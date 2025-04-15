@@ -2,38 +2,47 @@ package com.example.projetinfo
 
 import android.os.Bundle
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.content.Intent
 
-class ManageVehiclesActivity : AppCompatActivity(), Notifier {
+
+class ManageVehiclesActivity : AppCompatActivity() {
 
     private lateinit var listView: ListView
     private lateinit var vehicleList: MutableList<Pair<String, String>> // Pair<vehicleDescription, parkingKey>
-    private lateinit var adapter: VehicleAdapter // Utilisation du VehicleAdapter personnalisé
-
-    private val toastNotifier by lazy { ToastNotifier(this) }
-
-    override fun notify(message: String) {
-        toastNotifier.notify(message)
-    }
+    private lateinit var adapter: VehicleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_vehicles)
+
+        // Initialisation de la barre de navigation
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_add -> {
+                    val intent = Intent(this, AddVehicleActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
 
         VehicleRepository.init(this)
 
         listView = findViewById(R.id.listViewVehicles)
         loadAllVehicles()
 
-
         adapter = VehicleAdapter(
             this,
             vehicleList // On passe la liste des véhicules directement
         )
         listView.adapter = adapter
+
 
         listView.setOnItemClickListener { _, _, position, _ ->
             val selectedVehicle = vehicleList[position]
@@ -45,30 +54,12 @@ class ManageVehiclesActivity : AppCompatActivity(), Notifier {
                     VehicleRepository.removeVehicle(selectedVehicle.first, selectedVehicle.second)
                     vehicleList.removeAt(position)
                     refreshList()
-                    notify("Véhicule supprimé")
+                    Toast.makeText(this, "Véhicule supprimé", Toast.LENGTH_LONG).show()
                 }
                 .setNegativeButton("Annuler", null)
                 .show()
         }
 
-        // Configuration du BottomNavigationView
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    // Action pour l'item "Ajouter un véhicule"
-                    // Lancer l'activité AddVehicleActivity
-                    val intent = Intent(this, AddVehicleActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                R.id.navigation_manage -> {
-                    // Action pour un autre item (si tu en as)
-                    true
-                }
-                else -> false
-            }
-        }
     }
 
     private fun loadAllVehicles() {
@@ -77,14 +68,14 @@ class ManageVehiclesActivity : AppCompatActivity(), Notifier {
             val parkingKey = i.toString()
             val vehicles = VehicleRepository.getVehicles(parkingKey)
             vehicles.forEach { vehicle ->
-                vehicleList.add(Pair(vehicle, parkingKey)) // Ajoute la paire (description, parkingKey)
+                vehicleList.add(Pair(vehicle, parkingKey))
             }
         }
     }
 
     private fun refreshList() {
         adapter.clear()
-        adapter.addAll(vehicleList) // Ajouter la liste complète d'objets Pair<String, String>
+        adapter.addAll(vehicleList)
         adapter.notifyDataSetChanged()
     }
 }

@@ -1,17 +1,24 @@
 package com.example.projetinfo
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import android.content.Intent
 import android.widget.ImageView
 import java.text.SimpleDateFormat
 import java.util.*
 
 class DetailsVoitureActivity : AppCompatActivity(), Notifier {
+
+    private val toastNotifier by lazy { ToastNotifier(this)}
+
+    override fun notify(message: String) {
+        toastNotifier.notify(message)
+    }
+
     private var dateDebut: Calendar? = null
     private var dateFin: Calendar? = null
     private val formatDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -19,17 +26,11 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
     private var nombreDeJours: Int = 0
     private var montantTotal: Double = 0.0
 
-    private val toastNotifier by lazy { ToastNotifier(this) }
-
-    override fun notify(message: String) {
-        toastNotifier.notify(message)
-    }
-
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_voiture)
 
+        // Variables pour stocker le niveau une seule fois
         var niveauBatterieMemo: String? = null
         var niveauEssenceMemo: String? = null
 
@@ -61,6 +62,7 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
             else -> typeIcon.setImageResource(android.R.drawable.ic_dialog_alert)
         }
 
+        // Ajouter un bouton pour afficher le niveau de la batterie/essence
         val btnNiveau = findViewById<Button>(R.id.btnNiveau)
         btnNiveau.setOnClickListener {
             if (voiture is VoitureElectrique) {
@@ -84,7 +86,7 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
         btnDateDebut.setOnClickListener {
             showDatePicker { date ->
                 dateDebut = date
-                notify("Date début : ${formatDate.format(date.time)}")
+                Toast.makeText(this, "Date début : ${formatDate.format(date.time)}", Toast.LENGTH_SHORT).show()
                 updateDaysCount(tvNombreDeJours)
             }
         }
@@ -92,7 +94,7 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
         btnDateFin.setOnClickListener {
             showDatePicker { date ->
                 dateFin = date
-                notify("Date fin : ${formatDate.format(date.time)}")
+                Toast.makeText(this, "Date fin : ${formatDate.format(date.time)}", Toast.LENGTH_SHORT).show()
                 updateDaysCount(tvNombreDeJours)
             }
         }
@@ -103,18 +105,21 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
                 return@setOnClickListener
             }
 
+            // Assurez-vous que les dates sont non nulles avant de créer la réservation
             val reservation = Reservation(
                 modele = modele,
-                dateDebut = dateDebut!!,
+                dateDebut = dateDebut!!, // Utilisation de "!!" pour garantir que ce n'est pas null
                 dateFin = dateFin!!,
                 tarifJournalier = tarifJournalier,
                 nombreDeJours = nombreDeJours,
                 montantTotal = montantTotal
             )
 
-            nombreDeJours = reservation.calculerDuree()
-            montantTotal = reservation.calculerMontantTotal()
+            // Calculer la durée et le montant total de la réservation
+            nombreDeJours = reservation.calculerDuree() // Calcul de la durée
+            montantTotal = reservation.calculerMontantTotal() // Calcul du montant total
 
+            // Afficher la durée et le montant total
             tvNombreDeJours.text = "Nombre de jours : $nombreDeJours"
 
             val intent = Intent(this, ReservationActivity::class.java).apply {
@@ -143,7 +148,6 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
         ).show()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateDaysCount(tv: TextView) {
         if (dateDebut != null && dateFin != null) {
             val diff = dateFin!!.timeInMillis - dateDebut!!.timeInMillis
@@ -167,3 +171,4 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
         }
     }
 }
+

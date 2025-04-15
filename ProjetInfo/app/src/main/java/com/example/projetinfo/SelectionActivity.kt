@@ -15,7 +15,8 @@ class SelectionActivity : AppCompatActivity() {
         val btnLoueur = findViewById<Button>(R.id.btnLoueur)
 
         btnLocataire.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
         // Envoie l'intent avec le contexte "ajout_voiture"

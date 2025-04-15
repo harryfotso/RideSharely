@@ -1,16 +1,17 @@
 package com.example.projetinfo
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.Locale
+
 
 class ReservationActivity : AppCompatActivity() {
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation)
@@ -36,8 +37,8 @@ class ReservationActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvDays).text = "Nombre de jours : ${reservation.nombreDeJours}"
         findViewById<TextView>(R.id.tvTotalAmount).text = "Montant total : ${reservation.montantTotal} €"
 
-        findViewById<Button>(R.id.btnIdentification).setOnClickListener {
-            val intent = Intent(this, IdentificationActivity::class.java)
+        findViewById<Button>(R.id.btnPaiement).setOnClickListener {
+            val intent = Intent(this, PaymentActivity::class.java)
             intent.putExtra("context", "louer_voiture")
             startActivity(intent)
         }

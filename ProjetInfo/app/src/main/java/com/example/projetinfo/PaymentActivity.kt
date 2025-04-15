@@ -1,25 +1,28 @@
 package com.example.projetinfo
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.widget.Button
 import android.widget.EditText
-import androidx.annotation.RequiresApi
+import android.widget.Toast
+
+
 
 class PaymentActivity : AppCompatActivity(), Notifier {
 
-    private val toastNotifier by lazy { ToastNotifier(this) }
+    private val toastNotifier by lazy { ToastNotifier(this)}
 
     override fun notify(message: String) {
         toastNotifier.notify(message)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
+
 
         val etNumCarte = findViewById<EditText>(R.id.etNumCarte)
         val etDateExpiration = findViewById<EditText>(R.id.etDateExpiration)
@@ -50,3 +53,6 @@ class PaymentActivity : AppCompatActivity(), Notifier {
         }
     }
 }
+
+
+

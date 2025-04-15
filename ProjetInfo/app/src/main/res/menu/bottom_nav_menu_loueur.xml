@@ -4,9 +4,11 @@
         android:id="@+id/navigation_manage"
         android:icon="@drawable/menu_burger"
         android:title="Mes voitures" />
+
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/portrait"
-        android:title="Identification" />
+        android:id="@+id/navigation_add"
+        android:icon="@drawable/auto"
+        android:title="Ajouter voiture" />
 
 </menu>
+

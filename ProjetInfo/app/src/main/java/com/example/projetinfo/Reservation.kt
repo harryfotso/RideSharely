@@ -8,8 +8,12 @@ class Reservation(
     val dateFin: Calendar,
     val tarifJournalier: Double,
     val nombreDeJours: Int,
-    var montantTotal: Double
+    var montantTotal: Double,
 ) {
+    companion object {
+        const val localisation = "Solbosch"
+    }
+
     fun calculerDuree(): Int {
         val diff = dateFin.timeInMillis - dateDebut.timeInMillis
         return (diff / (1000 * 60 * 60 * 24)).toInt()
@@ -20,3 +24,4 @@ class Reservation(
         return tarifJournalier * jours
     }
 }
+

@@ -36,6 +36,7 @@ class ReservationActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvEndDate).text = "Date fin : $dateFin"
         findViewById<TextView>(R.id.tvDays).text = "Nombre de jours : ${reservation.nombreDeJours}"
         findViewById<TextView>(R.id.tvTotalAmount).text = "Montant total : ${reservation.montantTotal} €"
+        findViewById<TextView>(R.id.tvLocalisation).text = "Localisation : ${Reservation.localisation}"
 
         findViewById<Button>(R.id.btnPaiement).setOnClickListener {
             val intent = Intent(this, PaymentActivity::class.java)

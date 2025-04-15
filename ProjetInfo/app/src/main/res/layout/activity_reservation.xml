@@ -52,6 +52,14 @@
         android:textSize="18sp"
         android:layout_marginBottom="8dp" />
 
+    <TextView
+        android:id="@+id/tvLocalisation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Localisation : "
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp" />
+
     <Button
         android:id="@+id/btnPaiement"
         android:layout_width="wrap_content"

@@ -1,11 +1,11 @@
 package com.example.projetinfo
 
 class Identification(
-    val nom: String,
-    val prenom: String,
-    val email: String,
-    val motDePasse: String,
-    val telephone: String
+    private val nom: String,
+    private val prenom: String,
+    private val email: String,
+    private val motDePasse: String,
+    private val telephone: String
 ) {
 
     fun verifierDonnees(): Boolean {

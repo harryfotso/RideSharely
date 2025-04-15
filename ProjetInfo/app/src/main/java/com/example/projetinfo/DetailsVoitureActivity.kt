@@ -1,5 +1,6 @@
 package com.example.projetinfo
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,7 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
     private var nombreDeJours: Int = 0
     private var montantTotal: Double = 0.0
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_voiture)
@@ -148,6 +150,7 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
         ).show()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateDaysCount(tv: TextView) {
         if (dateDebut != null && dateFin != null) {
             val diff = dateFin!!.timeInMillis - dateDebut!!.timeInMillis

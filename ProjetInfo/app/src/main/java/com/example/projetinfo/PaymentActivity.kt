@@ -1,14 +1,12 @@
 package com.example.projetinfo
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-
+import androidx.annotation.RequiresApi
 
 
 class PaymentActivity : AppCompatActivity(), Notifier {
@@ -19,6 +17,7 @@ class PaymentActivity : AppCompatActivity(), Notifier {
         toastNotifier.notify(message)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)

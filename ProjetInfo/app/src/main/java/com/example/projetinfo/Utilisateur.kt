@@ -3,8 +3,8 @@ package com.example.projetinfo
 import java.io.Serializable
 
 class Utilisateur(
-    val nom: String,
-    val prenom: String,
+    private val nom: String,
+    private val prenom: String,
     val email: String,
     val telephone: String
 ) : Serializable {

@@ -1,18 +1,13 @@
 package com.example.projetinfo
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import android.view.MenuItem
 import com.github.chrisbanes.photoview.PhotoView
-import java.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.content.Intent
-import android.view.Menu
 import android.widget.ImageButton
 import android.widget.TextView
 
@@ -87,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showDialogMenu(parkingKey: String) {
         val builder = AlertDialog.Builder(this)
 

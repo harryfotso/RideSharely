@@ -1,6 +1,6 @@
 package com.example.projetinfo
 
-open class StatistiquesParking(private val parking: Parking) : Observer {
+class StatistiquesParking(private val parking: Parking) : Observer {
     protected var nombreDeReservations: Int = 0
 
     init {

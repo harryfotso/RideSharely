@@ -4,7 +4,7 @@ class Parking(private val parkingKey: String) : Observable {
     private val observateurs = mutableListOf<Observer>()
 
     // Récupère les réservations (véhicules) depuis VehicleRepository
-    fun obtenirReservations(): List<String> {
+    private fun obtenirReservations(): List<String> {
         return VehicleRepository.getVehicles(parkingKey)
     }
 

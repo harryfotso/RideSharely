@@ -5,10 +5,18 @@
     android:padding="16dp"
     android:gravity="center">
     <TextView
-        android:id="@+id/tvNAMEFACTURE"
+        android:id="@+id/tvReservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FACTURE :"
+        android:text="Détails de la réservation :"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tvVehicleMarque"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Marque : "
         android:textSize="18sp"
         android:layout_marginBottom="8dp" />
 

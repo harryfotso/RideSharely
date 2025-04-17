@@ -19,13 +19,11 @@ class SelectionActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Envoie l'intent avec le contexte "ajout_voiture"
         btnLoueur.setOnClickListener {
             val intent = Intent(this, IdentificationActivity::class.java)
-            intent.putExtra("context", "ajout_voiture")  // Assurez-vous que vous passez le bon contexte
+            intent.putExtra("context", "ajout_voiture")
             startActivity(intent)
         }
-
     }
 }
 

@@ -1,15 +1,18 @@
 package com.example.projetinfo
 
+import java.io.Serializable
 import java.util.Calendar
 
+
 class Reservation(
+    val marque: String,
     val modele: String,
     val dateDebut: Calendar,
     val dateFin: Calendar,
     val tarifJournalier: Double,
-    val nombreDeJours: Int,
-    var montantTotal: Double,
-) {
+    var nombreDeJours: Int,
+    var montantTotal: Double
+): Serializable {
     companion object {
         const val localisation = "Solbosch"
     }

@@ -51,7 +51,7 @@
                 android:id="@+id/etTelephone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Téléphone"
+                android:hint="Numéro de téléphone"
                 android:inputType="phone" />
 
             <Button

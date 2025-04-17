@@ -1,11 +1,13 @@
 package com.example.projetinfo
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -50,35 +52,32 @@ class AddVehicleActivity : AppCompatActivity(), Notifier {
 
 
         // Configuration du clic sur le bouton "Ajouter"
-        btnAjouter.setOnClickListener { //Quand l'utilisateur clique sur ce bouton, l'action suivante est exécutée
+        btnAjouter.setOnClickListener {
             // Récupération des valeurs saisies dans les champs
             val marque = marqueInput.text.toString()
             val modele = modeleInput.text.toString()
             val annee = anneeInput.text.toString().toIntOrNull()  // Conversion en entier, ou null si invalide
             val couleur = couleurInput.text.toString()
             val tarif = tarifInput.text.toString().toDoubleOrNull()  // Conversion en double, ou null si invalide
-            val parkingNumber = (spinnerParking.selectedItemPosition + 1).toString() // "1", "2" ou "3"
+            val parkingNumber = (spinnerParking.selectedItemPosition + 1).toString()
             val selectedType = spinnerType.selectedItem.toString()
 
 
             // Vérification si tous les champs sont remplis correctement
             if (marque.isEmpty() || modele.isEmpty() || annee == null || couleur.isEmpty() || tarif == null || annee <= 0 || tarif <= 0) {
                 notify("Veuillez remplir tous les champs correctement")
-                //Toast.LENGTH_SHORT détermine la durée de l'affichage du message
-                //Toast est une classe dans Android qui permet d'afficher un message court et temporaire à l'utilisateur sous forme de pop-up
                 return@setOnClickListener  // Sortie de la fonction si un champ est invalide
             }
 
             val vehicleDescription = "Marque: $marque, Modèle/année: $modele/$annee, Couleur: $couleur, Tarif: $tarif €/jour, Type: $selectedType" // Description du véhicule ajouté avec une chaîne de caractères
 
-
-            // Ajoute dans le bon parking
+            // Ajoute le véhicule dans le bon parking
             VehicleRepository.addVehicle(vehicleDescription, parkingNumber)
 
             // Affichage d'un message de confirmation
             notify("Véhicule ajouté dans Parking $parkingNumber")
 
-            //Termine l'activité actuelle, fermant la page où l'utilisateur ajoute un véhicule et donc l''utilisateur est renvoyé à l'activité précédente après l'ajout du véhicule
+            // Termine l'activité actuelle, fermant la page où l'utilisateur ajoute un véhicule
             finish()
         }
 

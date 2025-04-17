@@ -1,15 +1,19 @@
 package com.example.projetinfo
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import java.time.LocalDate
 
 
 class Payment(
     private val numCarte: String,
     private val dateExpiration: String,
-    private val cvv: String
+    private val cvv: String,
+    private val reservation: Reservation,
 ) {
+
+
+    fun afficherMontant(): String {
+        return "Montant à payer : ${reservation.montantTotal} €"
+    }
 
     // Vérifie si le CVV est bien composé de 3 chiffres
     fun verifierCvv(): Boolean {
@@ -18,7 +22,6 @@ class Payment(
     }
 
     // Vérifie si la carte est expirée
-    @RequiresApi(Build.VERSION_CODES.O)
     fun verifierDateExpiration(): Boolean {
         val expirationMonth = dateExpiration.take(2).toInt()
         val expirationYear = "20${dateExpiration.takeLast(2)}".toInt()  // Convertir AA en 20AA

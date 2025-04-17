@@ -1,17 +1,14 @@
 package com.example.projetinfo
 
 class StatistiquesParking(private val parking: Parking) : Observer {
-    protected var nombreDeReservations: Int = 0
+    private var nombreDeVoitures: Int = 0
 
     init {
-        parking.ajouterObservateur(this)
+        parking.ajouter(this) // S'enregistre comme observateur
     }
 
     override fun mettreAJour() {
-        nombreDeReservations = parking.obtenirNombreDeReservations()
-    }
-
-    fun obtenirStatistiques(): String {
-        return "Nombre de véhicules : $nombreDeReservations"
+        nombreDeVoitures = parking.obtenirNombreDeVoitures()
+        println("Statistiques mises à jour : $nombreDeVoitures réservations")
     }
 }

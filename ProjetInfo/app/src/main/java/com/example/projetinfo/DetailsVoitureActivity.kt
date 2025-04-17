@@ -1,6 +1,5 @@
 package com.example.projetinfo
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +26,6 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
     private var nombreDeJours: Int = 0
     private var montantTotal: Double = 0.0
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_voiture)
@@ -35,11 +33,17 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
         // Variables pour stocker le niveau une seule fois
         var niveauBatterieMemo: String? = null
         var niveauEssenceMemo: String? = null
+        var consommation: String? = null
 
-        val descriptionVoiture = intent.getStringExtra("vehicleDescription") ?: ""
-        val voiture = parseVoiture(descriptionVoiture)
+        val voiture = intent.getSerializableExtra("selectedVehicle") as? Voiture
+
+        if (voiture == null) {
+            notify("Erreur : voiture introuvable")
+            finish()
+            return
+        }
+
         tarifJournalier = voiture.tarif
-        val modele = voiture.modele
 
         findViewById<TextView>(R.id.marqueText).text = "Marque : ${voiture.marque}"
         findViewById<TextView>(R.id.modeleText).text = "Modèle : ${voiture.modele}"
@@ -64,8 +68,33 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
             else -> typeIcon.setImageResource(android.R.drawable.ic_dialog_alert)
         }
 
+        val btnReduction = findViewById<Button>(R.id.btnReduction)
+        val btnConsommation = findViewById<Button>(R.id.btnConsommation)
+
+        // Gestion du bouton "Appliquer la réduction"
+        btnReduction.setOnClickListener {
+            if (voiture is VoitureElectrique) {
+                val message = voiture.appliquerReduction()  // Appel à la méthode de la sous-classe VoitureElectrique
+                notify(message)
+            } else if (voiture is VoitureEssence) {
+                val message = voiture.appliquerReduction()  // Appel à la méthode de la sous-classe VoitureEssence
+                notify(message)
+            }
+        }
+
+        // Initialisation de la consommation
+        if (consommation == null) {
+            consommation = voiture.afficherConsommation()
+        }
+
+        btnConsommation.setOnClickListener {
+            // Afficher la consommation pré-calculée
+            notify(consommation)
+        }
+
         // Ajouter un bouton pour afficher le niveau de la batterie/essence
         val btnNiveau = findViewById<Button>(R.id.btnNiveau)
+
         btnNiveau.setOnClickListener {
             if (voiture is VoitureElectrique) {
                 if (niveauBatterieMemo == null) {
@@ -88,7 +117,7 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
         btnDateDebut.setOnClickListener {
             showDatePicker { date ->
                 dateDebut = date
-                Toast.makeText(this, "Date début : ${formatDate.format(date.time)}", Toast.LENGTH_SHORT).show()
+                notify("Date début : ${formatDate.format(date.time)}")
                 updateDaysCount(tvNombreDeJours)
             }
         }
@@ -96,7 +125,7 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
         btnDateFin.setOnClickListener {
             showDatePicker { date ->
                 dateFin = date
-                Toast.makeText(this, "Date fin : ${formatDate.format(date.time)}", Toast.LENGTH_SHORT).show()
+                notify("Date fin : ${formatDate.format(date.time)}")
                 updateDaysCount(tvNombreDeJours)
             }
         }
@@ -107,29 +136,30 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
                 return@setOnClickListener
             }
 
-            // Assurez-vous que les dates sont non nulles avant de créer la réservation
+
             val reservation = Reservation(
-                modele = modele,
-                dateDebut = dateDebut!!, // Utilisation de "!!" pour garantir que ce n'est pas null
+                marque = voiture.marque,
+                modele = voiture.modele,
+                dateDebut = dateDebut!!,
                 dateFin = dateFin!!,
                 tarifJournalier = tarifJournalier,
-                nombreDeJours = nombreDeJours,
-                montantTotal = montantTotal
+                nombreDeJours = 0,
+                montantTotal = 0.0
             )
 
-            // Calculer la durée et le montant total de la réservation
-            nombreDeJours = reservation.calculerDuree() // Calcul de la durée
-            montantTotal = reservation.calculerMontantTotal() // Calcul du montant total
+            // Maintenant qu'on a un objet reservation, on peut calculer les valeurs
+            nombreDeJours = reservation.calculerDuree()
+            montantTotal = reservation.calculerMontantTotal()
+
+            // Mettre à jour les champs dans reservation
+            reservation.nombreDeJours = nombreDeJours
+            reservation.montantTotal = montantTotal
 
             // Afficher la durée et le montant total
             tvNombreDeJours.text = "Nombre de jours : $nombreDeJours"
 
             val intent = Intent(this, ReservationActivity::class.java).apply {
-                putExtra("modele", voiture.modele)
-                putExtra("dateDebut", formatDate.format(dateDebut!!.time))
-                putExtra("dateFin", formatDate.format(dateFin!!.time))
-                putExtra("nombreDeJours", nombreDeJours)
-                putExtra("montantTotal", montantTotal)
+                putExtra("reservation", reservation)
             }
             startActivity(intent)
         }
@@ -150,27 +180,11 @@ class DetailsVoitureActivity : AppCompatActivity(), Notifier {
         ).show()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateDaysCount(tv: TextView) {
         if (dateDebut != null && dateFin != null) {
             val diff = dateFin!!.timeInMillis - dateDebut!!.timeInMillis
             val jours = (diff / (1000 * 60 * 60 * 24)).toInt()
             tv.text = "Nombre de jours : $jours"
-        }
-    }
-
-    private fun parseVoiture(description: String): Voiture {
-        val marque = Regex("Marque: ([^,]+)").find(description)?.groupValues?.get(1) ?: ""
-        val modele = Regex("Modèle/année: ([^/]+)/").find(description)?.groupValues?.get(1) ?: ""
-        val annee = Regex("/(\\d{4})").find(description)?.groupValues?.get(1)?.toIntOrNull() ?: 0
-        val couleur = Regex("Couleur: ([^,]+)").find(description)?.groupValues?.get(1) ?: ""
-        val tarif = Regex("Tarif: ([\\d.]+)").find(description)?.groupValues?.get(1)?.toDoubleOrNull() ?: 0.0
-        val type = Regex("Type: ([^,]+)").find(description)?.groupValues?.get(1)?.trim()?.lowercase() ?: ""
-
-        return when (type) {
-            "voiture électrique" -> VoitureElectrique(marque, modele, annee, couleur, tarif)
-            "voiture à essence" -> VoitureEssence(marque, modele, annee, couleur, tarif)
-            else -> VoitureEssence(marque, modele, annee, couleur, tarif)
         }
     }
 }

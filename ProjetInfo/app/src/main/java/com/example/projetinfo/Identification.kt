@@ -8,21 +8,19 @@ class Identification(
     private val telephone: String
 ) {
 
+    // L'objet Utilisateur est créé automatiquement ici
+    val utilisateur = Utilisateur(nom, prenom, email, telephone)
+
     fun verifierDonnees(): Boolean {
         return nom.isNotBlank() &&
                 prenom.isNotBlank() &&
                 email.isNotBlank() &&
                 motDePasse.isNotBlank() &&
                 telephone.isNotBlank() &&
-                Identification.emailEstValide(email) &&  // Utilisation de la méthode statique pour l'email
-                Identification.telephoneEstValide(telephone)  // Utilisation de la méthode statique pour le téléphone
+                Identification.emailEstValide(email) &&
+                Identification.telephoneEstValide(telephone)
     }
 
-    fun creerUtilisateur(): Utilisateur {
-        return Utilisateur(nom, prenom, email, telephone)
-    }
-
-    // Méthode statique pour valider un email indépendamment d'une instance
     companion object {
         fun emailEstValide(email: String): Boolean {
             val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")

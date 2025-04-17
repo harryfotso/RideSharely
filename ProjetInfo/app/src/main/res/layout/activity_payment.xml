@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:gravity="start|top"> <!-- Aligner le contenu vers le haut -->
 
     <EditText
         android:id="@+id/etNumCarte"
@@ -27,8 +28,18 @@
         android:inputType="number" />
 
     <Button
+        android:id="@+id/btnAfficherMontant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Afficher le montant"
+        android:layout_marginBottom="8dp" /> <!-- Espacement entre les boutons -->
+
+    <Button
         android:id="@+id/btnConfirmerPaiement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Confirmer le paiement" />
+
 </LinearLayout>
+
+

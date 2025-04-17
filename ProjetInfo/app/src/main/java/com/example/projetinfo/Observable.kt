@@ -1,7 +1,13 @@
 package com.example.projetinfo
 
 interface Observable {
-    fun ajouterObservateur(observateur: Observer)
-    fun supprimerObservateur(observateur: Observer)
-    fun notifierObservateurs()
+    val observateurs: MutableList<Observer>
+
+    fun ajouter(observateur: Observer) {
+        observateurs.add(observateur)
+    }
+
+    fun notifier() {
+        observateurs.forEach { it.mettreAJour() }
+    }
 }

@@ -1,13 +1,18 @@
 package com.example.projetinfo
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import android.view.MenuItem
 import com.github.chrisbanes.photoview.PhotoView
+import java.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.content.Intent
+import android.view.Menu
 import android.widget.ImageButton
 import android.widget.TextView
 
@@ -18,18 +23,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         // Récupérer l'utilisateur passé de l'IdenticationActivity
         val utilisateur = intent.getSerializableExtra("utilisateur") as Utilisateur?
 
         // Trouver l'icône et la mettre en place pour afficher les informations
         val btnAfficherUtilisateur = findViewById<ImageButton>(R.id.btnAfficherUtilisateur)
+
         btnAfficherUtilisateur.setOnClickListener {
-            // Afficher un Dialog avec les infos utilisateur
+            // Afficher un Dialog avec les infos de l'utilisateur
             if (utilisateur != null) {
                 val dialog = AlertDialog.Builder(this)
                     .setTitle("Informations Utilisateur")
-                    .setMessage("Nom et Prénom: ${utilisateur.getNomComplet()}\nEmail: ${utilisateur.email}\nTéléphone: ${utilisateur.telephone}")
+                    .setMessage("Nom et Prénom: ${utilisateur.getNomComplet()}\nEmail: ${utilisateur.email}\nNuméro de téléphone: ${utilisateur.telephone}")
                     .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
                     .create()
                 dialog.show()
@@ -65,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_map -> {
@@ -82,17 +88,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun showDialogMenu(parkingKey: String) {
+
         val builder = AlertDialog.Builder(this)
 
-        // Initialisation de Parking et StatistiquesParking
         val parking = Parking(parkingKey)
         val statistiquesParking = StatistiquesParking(parking)
-        parking.notifierObservateurs() // Met à jour les observateurs immédiatement
+
+        statistiquesParking.mettreAJour()
+        parking.notifier()
 
         val vehicleList = VehicleRepository.getVehicles(parkingKey)
-        val statistiques = statistiquesParking.obtenirStatistiques()
+        val statistiques = "Statistiques : ${parking.obtenirNombreDeVoitures()} voitures"
 
         // Ajout des statistiques dans le titre personnalisé
         val titleView = TextView(this).apply {
@@ -121,15 +128,31 @@ class MainActivity : AppCompatActivity() {
 
             builder.setItems(simplifiedList.toTypedArray()) { _, which ->
                 val selectedVehicle = vehicleList[which]
+                val voiture = parseVoiture(selectedVehicle)
 
                 val intent = Intent(this, DetailsVoitureActivity::class.java)
-                intent.putExtra("vehicleDescription", selectedVehicle)
+                intent.putExtra("selectedVehicle", voiture)
                 startActivity(intent)
             }
         }
 
         builder.setPositiveButton("Fermer") { dialog, _ -> dialog.dismiss() }
         builder.show()
+    }
+
+    private fun parseVoiture(description: String): Voiture {
+        val marque = Regex("Marque: ([^,]+)").find(description)?.groupValues?.get(1) ?: ""
+        val modele = Regex("Modèle/année: ([^/]+)/").find(description)?.groupValues?.get(1) ?: ""
+        val annee = Regex("/(\\d{4})").find(description)?.groupValues?.get(1)?.toIntOrNull() ?: 0
+        val couleur = Regex("Couleur: ([^,]+)").find(description)?.groupValues?.get(1) ?: ""
+        val tarif = Regex("Tarif: ([\\d.]+)").find(description)?.groupValues?.get(1)?.toDoubleOrNull() ?: 0.0
+        val type = Regex("Type: ([^,]+)").find(description)?.groupValues?.get(1)?.trim()?.lowercase() ?: ""
+
+        return when (type) {
+            "voiture électrique" -> VoitureElectrique(marque, modele, annee, couleur, tarif)
+            "voiture à essence" -> VoitureEssence(marque, modele, annee, couleur, tarif)
+            else -> VoitureEssence(marque, modele, annee, couleur, tarif)
+        }
     }
 }
 

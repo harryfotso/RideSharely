@@ -37,10 +37,7 @@ class ManageVehiclesActivity : AppCompatActivity() {
         listView = findViewById(R.id.listViewVehicles)
         loadAllVehicles()
 
-        adapter = VehicleAdapter(
-            this,
-            vehicleList // On passe la liste des véhicules directement
-        )
+        adapter = VehicleAdapter(this, vehicleList)
         listView.adapter = adapter
 
 

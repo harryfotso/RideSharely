@@ -1,4 +1,4 @@
-package com.example.projetinfo // Remplace par ton propre package
+package com.example.projetinfo
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ class VehicleAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false)
-        val vehicle = getItem(position) // On récupère l'élément à la position donnée
+        val vehicle = getItem(position)
         val textView = view.findViewById<TextView>(android.R.id.text1)
         textView.text = vehicle?.first // Affichage de la description du véhicule
         return view

@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import android.content.Intent
 import android.widget.ImageView
 import java.text.SimpleDateFormat

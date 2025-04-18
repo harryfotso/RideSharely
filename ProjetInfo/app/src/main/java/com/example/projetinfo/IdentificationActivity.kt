@@ -3,10 +3,9 @@ package com.example.projetinfo
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class IdentificationActivity : AppCompatActivity(), Notifier {
 

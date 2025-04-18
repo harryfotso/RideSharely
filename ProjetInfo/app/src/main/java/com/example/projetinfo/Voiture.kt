@@ -13,10 +13,10 @@ open class Voiture(
 ) : Serializable {
 
 
-    protected var tarifSpecial: Double = tarif
+    protected var tarifReduction: Double = tarif
 
-    // Méthode pour calculer un tarif avec un réduction de 20%
-    protected fun calculerTarifSpecial(): Double {
+    // Méthode pour calculer un tarif avec une réduction de 20%
+    protected fun calculerTarifReduction(): Double {
         return tarif * 0.8
     }
 
@@ -37,8 +37,8 @@ class VoitureElectrique(
 
     // Méthode pour appliquer le tarif avec réduction à une voiture électrique
     fun appliquerReduction() : String {
-        tarifSpecial = calculerTarifSpecial()
-        return "Le tarif avec la réduction pour cette voiture électrique est : $tarifSpecial €"
+        tarifReduction = calculerTarifReduction()
+        return "Le tarif avec la réduction pour cette voiture électrique est : $tarifReduction €"
     }
 
     // Implémentation de la méthode afficherConsommation pour les voitures électriques
@@ -60,8 +60,8 @@ class VoitureEssence(
 
     // Méthode pour appliquer le tarif avec réduction à une voiture à essence
     fun appliquerReduction(): String {
-        tarifSpecial = calculerTarifSpecial() // Appel à la méthode de la classe parente
-        return "Le tarif avec la réduction pour cette voiture à essence est : $tarifSpecial €"
+        tarifReduction = calculerTarifReduction() // Appel à la méthode de la classe parente
+        return "Le tarif avec la réduction pour cette voiture à essence est : $tarifReduction €"
     }
 
     // Implémentation de la méthode afficherConsommation pour les voitures à essence
